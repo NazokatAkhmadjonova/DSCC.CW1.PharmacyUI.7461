@@ -221,6 +221,7 @@
     <Content Include="Views\Medicines\Details.cshtml" />
     <Content Include="Views\Medicines\Edit.cshtml" />
     <Content Include="Views\Medicines\Index.cshtml" />
+    <Content Include="Views\Pharmacies\ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

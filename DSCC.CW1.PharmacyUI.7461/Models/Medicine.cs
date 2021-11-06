@@ -12,6 +12,6 @@ namespace DSCC.CW1.PharmacyUI._7461.Models
 		public DateTime ProductionDate { get; set; }
 		public DateTime ExpirationDate { get; set; }
 		public int Quantity { get; set; }
-		public Pharmacy Pharmacy { get; set; }
+		public Pharmacy MedicinePharmacy { get; set; }
 	}
 }

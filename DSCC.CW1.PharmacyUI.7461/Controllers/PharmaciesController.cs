@@ -17,7 +17,7 @@ namespace DSCC.CW1.PharmacyUI._7461.Controllers
 {
     public class PharmaciesController : Controller
     {
-        string MainURL = "https://localhost:44321/";
+        string MainURL = "https://localhost:5001/";
         // GET: Pharmacies
         public async Task<ActionResult> Index()
         {            
@@ -37,10 +37,10 @@ namespace DSCC.CW1.PharmacyUI._7461.Controllers
                 {
                     //Storing the response details recieved from web api 
                     var PhResponse = Response.Content.ReadAsStringAsync().Result;
-                    //Deserializing the response recieved from web api and storing into the Product list
+                    //Deserializing the response recieved from web api and storing into the Pharmacy list
                     PharInfo = JsonConvert.DeserializeObject<List<Pharmacy>>(PhResponse);
                 }
-                //returning the Product list to view 
+                //returning the Pharmacy list to view 
                 return View(PharInfo);
             }
         }
