@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31112.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSCC.CW1.PharmacyUI.7461", "DSCC.CW1.PharmacyUI.7461\DSCC.CW1.PharmacyUI.7461.csproj", "{B1878D15-F1D1-4CE7-A60D-CD3A1FEEB959}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B1878D15-F1D1-4CE7-A60D-CD3A1FEEB959}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1878D15-F1D1-4CE7-A60D-CD3A1FEEB959}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1878D15-F1D1-4CE7-A60D-CD3A1FEEB959}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1878D15-F1D1-4CE7-A60D-CD3A1FEEB959}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EE83FA43-8F97-4376-8AAB-3B6B94D7FB37}
+	EndGlobalSection
+EndGlobal
