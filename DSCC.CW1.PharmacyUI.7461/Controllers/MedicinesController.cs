@@ -113,7 +113,7 @@ namespace DSCC.CW1.PharmacyUI._7461.Controllers
 
         // GET: Medicines/Details/5
         public async Task<ActionResult> Details(int id)
-         {
+        {
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(MainURL);
@@ -134,45 +134,23 @@ namespace DSCC.CW1.PharmacyUI._7461.Controllers
 
 
         // GET: Medicines/Create
-         public ActionResult Create()
-            {
-                return View();
-            }
-            
-
-        
-
-
-        // GET: Medicines/Delete/5
-        public async Task<ActionResult> Delete(int id)
+        public ActionResult Create()
         {
-            using (var client = new HttpClient())
-            {
-                client.BaseAddress = new Uri(MainURL);
-                HttpResponseMessage Response = await client.GetAsync("api/Medicine/" + id);
-                Medicine st = null;
-                //Checking the response is successful or not which is sent using HttpClient
-                if (Response.IsSuccessStatusCode)
-                {
-                    //Storing the response details recieved from web api 
-                    var MedResponse = Response.Content.ReadAsStringAsync().Result;
-                    //Deseralizing the response recieved from web api and storing into the Medicine list
-                    st= JsonConvert.DeserializeObject<Medicine>(MedResponse);
-                     
-                }
-                return View(st);
-            }
+            return View();
         }
 
-        // POST: Medicines/Delete/5
-        [HttpPost, ActionName("Delete")]
+
+        // POST: Pharmacies/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
+        public async Task<ActionResult> Create([Bind(Include = "Id,Name,ProductionDate,ExpirationDate,Quantity")] Medicine medicine)
         {
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(MainURL);
-                HttpResponseMessage Response = await client.DeleteAsync("api/Medicine/" + id);
+                HttpResponseMessage Response = await client.PostAsJsonAsync("/api/Medicine/", medicine);
                 //Checking the response is successful or not which is sent using HttpClient
                 if (Response.IsSuccessStatusCode)
                 {
@@ -183,25 +161,69 @@ namespace DSCC.CW1.PharmacyUI._7461.Controllers
                 {
                     return View();
                 }
+            }
+        }
 
+
+            // GET: Medicines/Delete/5
+            public async Task<ActionResult> Delete(int id)
+            {
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(MainURL);
+                    HttpResponseMessage Response = await client.GetAsync("api/Medicine/" + id);
+                    Medicine st = null;
+                    //Checking the response is successful or not which is sent using HttpClient
+                    if (Response.IsSuccessStatusCode)
+                    {
+                        //Storing the response details recieved from web api 
+                        var MedResponse = Response.Content.ReadAsStringAsync().Result;
+                        //Deseralizing the response recieved from web api and storing into the Medicine list
+                        st = JsonConvert.DeserializeObject<Medicine>(MedResponse);
+
+                    }
+                    return View(st);
+                }
             }
 
-        }
-        /*    protected override void Dispose(bool disposing)
+            // POST: Medicines/Delete/5
+            [HttpPost, ActionName("Delete")]
+            [ValidateAntiForgeryToken]
+            public async Task<ActionResult> DeleteConfirmed(int id)
             {
-                if (disposing)
+                using (var client = new HttpClient())
                 {
-                    db.Dispose();
+                    client.BaseAddress = new Uri(MainURL);
+                    HttpResponseMessage Response = await client.DeleteAsync("api/Medicine/" + id);
+                    //Checking the response is successful or not which is sent using HttpClient
+                    if (Response.IsSuccessStatusCode)
+                    {
+                        return RedirectToAction("Index");
+
+                    }
+                    else
+                    {
+                        return View();
+                    }
+
                 }
-                base.Dispose(disposing);
-            }*/
+
+            }
+            /*    protected override void Dispose(bool disposing)
+                {
+                    if (disposing)
+                    {
+                        db.Dispose();
+                    }
+                    base.Dispose(disposing);
+                }*/
 
 
 
-        /*  public async Task<Medicine> GetMedicineById(int id){
-              var response = await _client.
+            /*  public async Task<Medicine> GetMedicineById(int id){
+                  var response = await _client.
 
 
-}}*/
+    }}*/
+        }
     }
-}

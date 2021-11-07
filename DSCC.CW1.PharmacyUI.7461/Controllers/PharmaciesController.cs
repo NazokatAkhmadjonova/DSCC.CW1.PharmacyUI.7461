@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -20,7 +21,7 @@ namespace DSCC.CW1.PharmacyUI._7461.Controllers
         string MainURL = "https://localhost:5001/";
         // GET: Pharmacies
         public async Task<ActionResult> Index()
-        {            
+        {
             List<Pharmacy> PharInfo = new List<Pharmacy>();
             using (var client = new HttpClient())
             {
@@ -192,95 +193,113 @@ namespace DSCC.CW1.PharmacyUI._7461.Controllers
                    return HttpNotFound();
                }
                return View(pharmacy);
-           }
-
-           // GET: Pharmacies/Create
-           public ActionResult Create()
-           {
-               return View();
-           }
-
-           // POST: Pharmacies/Create
-           // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-           // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-           [HttpPost]
-           [ValidateAntiForgeryToken]
-           public ActionResult Create([Bind(Include = "Id,Name,City,District,Street")] Pharmacy pharmacy)
-           {
-               if (ModelState.IsValid)
-               {
-                   db.Pharmacies.Add(pharmacy);
-                   db.SaveChanges();
-                   return RedirectToAction("Index");
-               }
-
-               return View(pharmacy);
-           }
-
-           // GET: Pharmacies/Edit/5
-           public ActionResult Edit(int? id)
-           {
-               if (id == null)
-               {
-                   return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-               }
-               Pharmacy pharmacy = db.Pharmacies.Find(id);
-               if (pharmacy == null)
-               {
-                   return HttpNotFound();
-               }
-               return View(pharmacy);
-           }
-
-           // POST: Pharmacies/Edit/5
-           // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-           // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-           [HttpPost]
-           [ValidateAntiForgeryToken]
-           public ActionResult Edit([Bind(Include = "Id,Name,City,District,Street")] Pharmacy pharmacy)
-           {
-               if (ModelState.IsValid)
-               {
-                   db.Entry(pharmacy).State = EntityState.Modified;
-                   db.SaveChanges();
-                   return RedirectToAction("Index");
-               }
-               return View(pharmacy);
-           }
-
-           // GET: Pharmacies/Delete/5
-           public ActionResult Delete(int? id)
-           {
-               if (id == null)
-               {
-                   return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-               }
-               Pharmacy pharmacy = db.Pharmacies.Find(id);
-               if (pharmacy == null)
-               {
-                   return HttpNotFound();
-               }
-               return View(pharmacy);
-           }
-
-           // POST: Pharmacies/Delete/5
-           [HttpPost, ActionName("Delete")]
-           [ValidateAntiForgeryToken]
-           public ActionResult DeleteConfirmed(int id)
-           {
-               Pharmacy pharmacy = db.Pharmacies.Find(id);
-               db.Pharmacies.Remove(pharmacy);
-               db.SaveChanges();
-               return RedirectToAction("Index");
-           }
-
-           protected override void Dispose(bool disposing)
-           {
-               if (disposing)
-               {
-                   db.Dispose();
-               }
-               base.Dispose(disposing);
            }*/
+
+        /*public async Task<Create>(Pharmacy pharmacy)
+                {
+                    using (var client = new HttpClient())
+                    {
+                            Pharmacy createdCourse = null;
+                            var content = JsonConvert.SerializeObject(pharmacy);
+                            var httpResponse = await client.PostAsync("/api/Course", new StringContent(content, Encoding.Default, "application/json"));
+
+                            if (httpResponse.IsSuccessStatusCode)
+                            {
+                                createdCourse = JsonConvert.DeserializeObject<Pharmacy>(await httpResponse.Content.ReadAsStringAsync());
+                            }
+                    }
+
+                }*/
+
+        // POST: Pharmacies/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Create([Bind(Include = "Id,Name,City,District,Street")] Pharmacy pharmacy)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(MainURL);
+                HttpResponseMessage Response = await client.PostAsJsonAsync("/api/Pharmacy/", pharmacy);
+                //Checking the response is successful or not which is sent using HttpClient
+                if (Response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("Index");
+
+                }
+                else
+                {
+                    return View();
+                }
+            }
+        }
+
+            /*  // GET: Pharmacies/Edit/5
+              public ActionResult Edit(int? id)
+              {
+                  if (id == null)
+                  {
+                      return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                  }
+                  Pharmacy pharmacy = db.Pharmacies.Find(id);
+                  if (pharmacy == null)
+                  {
+                      return HttpNotFound();
+                  }
+                  return View(pharmacy);
+              }*/
+            /*
+               // POST: Pharmacies/Edit/5
+               // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+               // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+               [HttpPost]
+               [ValidateAntiForgeryToken]
+               public ActionResult Edit([Bind(Include = "Id,Name,City,District,Street")] Pharmacy pharmacy)
+               {
+                   if (ModelState.IsValid)
+                   {
+                       db.Entry(pharmacy).State = EntityState.Modified;
+                       db.SaveChanges();
+                       return RedirectToAction("Index");
+                   }
+                   return View(pharmacy);
+               }
+            *//*
+               // GET: Pharmacies/Delete/5
+               public ActionResult Delete(int? id)
+               {
+                   if (id == null)
+                   {
+                       return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                   }
+                   Pharmacy pharmacy = db.Pharmacies.Find(id);
+                   if (pharmacy == null)
+                   {
+                       return HttpNotFound();
+                   }
+                   return View(pharmacy);
+               }
+
+               // POST: Pharmacies/Delete/5
+               [HttpPost, ActionName("Delete")]
+               [ValidateAntiForgeryToken]
+               public ActionResult DeleteConfirmed(int id)
+               {
+                   Pharmacy pharmacy = db.Pharmacies.Find(id);
+                   db.Pharmacies.Remove(pharmacy);
+                   db.SaveChanges();
+                   return RedirectToAction("Index");
+               }
+
+               protected override void Dispose(bool disposing)
+               {
+                   if (disposing)
+                   {
+                       db.Dispose();
+                   }
+                   base.Dispose(disposing);
+               }*/
+        
     }
 }
