@@ -45,108 +45,242 @@ namespace DSCC.CW1.PharmacyUI._7461.Controllers
             }
         }
 
-     /*   // GET: Pharmacies/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Pharmacy pharmacy = db.Pharmacies.Find(id);
-            if (pharmacy == null)
-            {
-                return HttpNotFound();
-            }
-            return View(pharmacy);
-        }
 
-        // GET: Pharmacies/Create
+        //// GET: Pharmacy/Edit/5
+        public async Task<ActionResult> Edit(int id)
+        {
+            Pharmacy st = null;
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(MainURL);
+                HttpResponseMessage Response = await client.GetAsync("api/Pharmacy/" + id);
+                ////Checking the response is successful or not which is sent using HttpClient
+                if (Response.IsSuccessStatusCode)
+                {
+                    ////Storing the response details recieved from web api 
+                    var PharResponse = Response.Content.ReadAsStringAsync().Result;
+                    ////Deserializing the response recieved from web api and storing into the Pharmacy list
+                    st = JsonConvert.DeserializeObject<Pharmacy>(PharResponse);
+                }
+                else
+                    ModelState.AddModelError(string.Empty, "Server Error. Please contact administrator.");
+            }
+
+            return View(st);
+        }
+        // POST: Pharmacy/Edit/5
+        [HttpPost]
+        public async Task<ActionResult> Edit(int id, Pharmacy phar)
+        {
+            try
+            {
+                // TODO: Add update logic here
+                using (var client = new HttpClient())
+                {
+                    client.BaseAddress = new Uri(MainURL);
+                    HttpResponseMessage Response = await client.GetAsync("api/Pharmacy/" + id);
+                    Pharmacy st = null;
+                    //Checking the response is successful or not which is sent using HttpClient
+                    if (Response.IsSuccessStatusCode)
+                    {
+                        //Storing the response details recieved from web api 
+                        var PharResponse = Response.Content.ReadAsStringAsync().Result;
+                        //Deseralizing the response recieved from web api and storing into the Pharmacy list
+                        st = JsonConvert.DeserializeObject<Pharmacy>(PharResponse);
+                    }
+                    //med.PharmacyCategory = st.MedicinePharmacy;
+                    //HTTP POST
+                    var postTask = client.PutAsJsonAsync<Pharmacy>("api/Pharmacy/" + phar.Id, phar);
+                    postTask.Wait();
+                    var result = postTask.Result;
+                    if (result.IsSuccessStatusCode)
+                    {
+                        return RedirectToAction("Index");
+                    }
+                }
+                //ModelState.AddModelError(string.Empty, "Server Error. Please contact administrator.");
+                //return View(st);
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
+        }
+        // GET: Pharmacies/Details/5
+        public async Task<ActionResult> Details(int id)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(MainURL);
+                HttpResponseMessage Response = await client.GetAsync("api/Pharmacy/" + id);
+                Pharmacy st = null;
+                //Checking the response is successful or not which is sent using HttpClient
+                if (Response.IsSuccessStatusCode)
+                {
+                    //Storing the response details recieved from web api 
+                    var MedResponse = Response.Content.ReadAsStringAsync().Result;
+                    //Deseralizing the response recieved from web api and storing into the Pharmacy list
+                    st = JsonConvert.DeserializeObject<Pharmacy>(MedResponse);
+
+                }
+                return View(st);
+            }
+        }
+        // GET: Medicines/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Pharmacies/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,City,District,Street")] Pharmacy pharmacy)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Pharmacies.Add(pharmacy);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            return View(pharmacy);
-        }
-
-        // GET: Pharmacies/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Pharmacy pharmacy = db.Pharmacies.Find(id);
-            if (pharmacy == null)
-            {
-                return HttpNotFound();
-            }
-            return View(pharmacy);
-        }
-
-        // POST: Pharmacies/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,City,District,Street")] Pharmacy pharmacy)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(pharmacy).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(pharmacy);
-        }
 
         // GET: Pharmacies/Delete/5
-        public ActionResult Delete(int? id)
+        public async Task<ActionResult> Delete(int id)
         {
-            if (id == null)
+            using (var client = new HttpClient())
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                client.BaseAddress = new Uri(MainURL);
+                HttpResponseMessage Response = await client.GetAsync("api/Pharmacy/" + id);
+                Pharmacy st = null;
+                //Checking the response is successful or not which is sent using HttpClient
+                if (Response.IsSuccessStatusCode)
+                {
+                    //Storing the response details recieved from web api 
+                    var MedResponse = Response.Content.ReadAsStringAsync().Result;
+                    //Deseralizing the response recieved from web api and storing into the Pharmacy list
+                    st = JsonConvert.DeserializeObject<Pharmacy>(MedResponse);
+
+                }
+                return View(st);
             }
-            Pharmacy pharmacy = db.Pharmacies.Find(id);
-            if (pharmacy == null)
-            {
-                return HttpNotFound();
-            }
-            return View(pharmacy);
         }
 
         // POST: Pharmacies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Pharmacy pharmacy = db.Pharmacies.Find(id);
-            db.Pharmacies.Remove(pharmacy);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(MainURL);
+                HttpResponseMessage Response = await client.DeleteAsync("api/Pharmacy/" + id);
+                //Checking the response is successful or not which is sent using HttpClient
+                if (Response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("Index");
+
+                }
+                else
+                {
+                    return View();
+                }
+
+            }
+
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }*/
+        /*   // GET: Pharmacies/Details/5
+           public ActionResult Details(int? id)
+           {
+               if (id == null)
+               {
+                   return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+               }
+               Pharmacy pharmacy = db.Pharmacies.Find(id);
+               if (pharmacy == null)
+               {
+                   return HttpNotFound();
+               }
+               return View(pharmacy);
+           }
+
+           // GET: Pharmacies/Create
+           public ActionResult Create()
+           {
+               return View();
+           }
+
+           // POST: Pharmacies/Create
+           // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+           // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+           [HttpPost]
+           [ValidateAntiForgeryToken]
+           public ActionResult Create([Bind(Include = "Id,Name,City,District,Street")] Pharmacy pharmacy)
+           {
+               if (ModelState.IsValid)
+               {
+                   db.Pharmacies.Add(pharmacy);
+                   db.SaveChanges();
+                   return RedirectToAction("Index");
+               }
+
+               return View(pharmacy);
+           }
+
+           // GET: Pharmacies/Edit/5
+           public ActionResult Edit(int? id)
+           {
+               if (id == null)
+               {
+                   return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+               }
+               Pharmacy pharmacy = db.Pharmacies.Find(id);
+               if (pharmacy == null)
+               {
+                   return HttpNotFound();
+               }
+               return View(pharmacy);
+           }
+
+           // POST: Pharmacies/Edit/5
+           // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+           // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+           [HttpPost]
+           [ValidateAntiForgeryToken]
+           public ActionResult Edit([Bind(Include = "Id,Name,City,District,Street")] Pharmacy pharmacy)
+           {
+               if (ModelState.IsValid)
+               {
+                   db.Entry(pharmacy).State = EntityState.Modified;
+                   db.SaveChanges();
+                   return RedirectToAction("Index");
+               }
+               return View(pharmacy);
+           }
+
+           // GET: Pharmacies/Delete/5
+           public ActionResult Delete(int? id)
+           {
+               if (id == null)
+               {
+                   return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+               }
+               Pharmacy pharmacy = db.Pharmacies.Find(id);
+               if (pharmacy == null)
+               {
+                   return HttpNotFound();
+               }
+               return View(pharmacy);
+           }
+
+           // POST: Pharmacies/Delete/5
+           [HttpPost, ActionName("Delete")]
+           [ValidateAntiForgeryToken]
+           public ActionResult DeleteConfirmed(int id)
+           {
+               Pharmacy pharmacy = db.Pharmacies.Find(id);
+               db.Pharmacies.Remove(pharmacy);
+               db.SaveChanges();
+               return RedirectToAction("Index");
+           }
+
+           protected override void Dispose(bool disposing)
+           {
+               if (disposing)
+               {
+                   db.Dispose();
+               }
+               base.Dispose(disposing);
+           }*/
     }
 }
