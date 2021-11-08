@@ -17,8 +17,8 @@ namespace DSCC.CW1.PharmacyUI._7461.Controllers
 {
     public class MedicinesController : Controller
     {
-        string MainURL = "https://localhost:5001/";
-
+       string MainURL = "http://dscccw1microservicesapi7461-dev.us-east-2.elasticbeanstalk.com/";
+        //string MainURL = "https://localhost:5001/";
         //// GET: Medicines
         public async Task<ActionResult> Index()
         {
@@ -26,19 +26,26 @@ namespace DSCC.CW1.PharmacyUI._7461.Controllers
             using (var client = new HttpClient())
             {
                 //Passing service base url 
+
                 client.BaseAddress = new Uri(MainURL);
                 client.DefaultRequestHeaders.Clear();
+
                 ////Define request data format 
+            
                 client.DefaultRequestHeaders.Accept.Add(new
                MediaTypeWithQualityHeaderValue("application/json"));
-                ////Sending request to find web api REST service resource GetAllMedicines using HttpClient
+
+                ////Sending request to find web api REST service resource GetAllMedicines
+                ////
+                ////using HttpClient
                 HttpResponseMessage Response = await client.GetAsync("api/Medicine");
                 ////Checking the response is successful or not which is sent using HttpClient
                 if (Response.IsSuccessStatusCode)
                 {
                     ////Storing the response details recieved from web api 
                     var MedResponse = Response.Content.ReadAsStringAsync().Result;
-                    ////Deserializing the response recieved from web api and storing into the Medicine list
+                    ////Deserializing the response recieved from web api and storing 
+                    ////into the Medicine list
                     MedInfo = JsonConvert.DeserializeObject<List<Medicine>>(MedResponse);
                 }
                 ////returning the Medicine list to view 
@@ -55,11 +62,14 @@ namespace DSCC.CW1.PharmacyUI._7461.Controllers
                 client.BaseAddress = new Uri(MainURL);
                 HttpResponseMessage Response = await client.GetAsync("api/Medicine/" + id);
                 ////Checking the response is successful or not which is sent using HttpClient
+                ///
                 if (Response.IsSuccessStatusCode)
                 {
                     ////Storing the response details recieved from web api 
                     var MedResponse = Response.Content.ReadAsStringAsync().Result;
-                    ////Deserializing the response recieved from web api and storing into the Medicine list
+
+                    ////Deserializing the response recieved from web api and storing into 
+                    ////the Medicine list
                     st = JsonConvert.DeserializeObject<Medicine>(MedResponse);
                 }
                 else
@@ -82,10 +92,9 @@ namespace DSCC.CW1.PharmacyUI._7461.Controllers
                     Medicine st = null;
                     //Checking the response is successful or not which is sent using HttpClient
                     if (Response.IsSuccessStatusCode)
-                    {
-                        //Storing the response details recieved from web api 
+                    { 
                         var MedResponse = Response.Content.ReadAsStringAsync().Result;
-                        //Deseralizing the response recieved from web api and storing into the Medicine list
+                       
                         st = JsonConvert.DeserializeObject<Medicine>(MedResponse);
                     }
                     //med.MedicineCategory = st.MedicinePharmacy;
@@ -98,8 +107,7 @@ namespace DSCC.CW1.PharmacyUI._7461.Controllers
                         return RedirectToAction("Index");
                     }
                 }
-                //ModelState.AddModelError(string.Empty, "Server Error. Please contact administrator.");
-                //return View(st);
+                
                 return RedirectToAction("Index");
             }
             catch
@@ -122,9 +130,9 @@ namespace DSCC.CW1.PharmacyUI._7461.Controllers
                 //Checking the response is successful or not which is sent using HttpClient
                 if (Response.IsSuccessStatusCode)
                 {
-                    //Storing the response details recieved from web api 
+
                     var MedResponse = Response.Content.ReadAsStringAsync().Result;
-                    //Deseralizing the response recieved from web api and storing into the Medicine list
+
                     st = JsonConvert.DeserializeObject<Medicine>(MedResponse);
 
                 }

@@ -18,7 +18,8 @@ namespace DSCC.CW1.PharmacyUI._7461.Controllers
 {
     public class PharmaciesController : Controller
     {
-        string MainURL = "https://localhost:5001/";
+        string MainURL = "http://dscccw1microservicesapi7461-dev.us-east-2.elasticbeanstalk.com/";
+        //string MainURL = "https://localhost:5001/";
         // GET: Pharmacies
         public async Task<ActionResult> Index()
         {
@@ -147,9 +148,9 @@ namespace DSCC.CW1.PharmacyUI._7461.Controllers
                 if (Response.IsSuccessStatusCode)
                 {
                     //Storing the response details recieved from web api 
-                    var MedResponse = Response.Content.ReadAsStringAsync().Result;
+                    var PharResponse = Response.Content.ReadAsStringAsync().Result;
                     //Deseralizing the response recieved from web api and storing into the Pharmacy list
-                    st = JsonConvert.DeserializeObject<Pharmacy>(MedResponse);
+                    st = JsonConvert.DeserializeObject<Pharmacy>(PharResponse);
 
                 }
                 return View(st);
